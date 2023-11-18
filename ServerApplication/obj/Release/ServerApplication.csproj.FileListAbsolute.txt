@@ -1,0 +1,11 @@
+C:\Users\forus\source\repos\ServerApplication\bin\Release\ServerApplication.exe.config
+C:\Users\forus\source\repos\ServerApplication\bin\Release\ServerApplication.exe
+C:\Users\forus\source\repos\ServerApplication\bin\Release\ServerApplication.pdb
+C:\Users\forus\source\repos\ServerApplication\bin\Release\WcfServiceLibrary.dll
+C:\Users\forus\source\repos\ServerApplication\bin\Release\WcfServiceLibrary.pdb
+C:\Users\forus\source\repos\ServerApplication\bin\Release\WcfServiceLibrary.dll.config
+C:\Users\forus\source\repos\ServerApplication\obj\Release\ServerApplication.csproj.AssemblyReference.cache
+C:\Users\forus\source\repos\ServerApplication\obj\Release\ServerApplication.csproj.CoreCompileInputs.cache
+C:\Users\forus\source\repos\ServerApplication\obj\Release\ServerApplication.csproj.CopyComplete
+C:\Users\forus\source\repos\ServerApplication\obj\Release\ServerApplication.exe
+C:\Users\forus\source\repos\ServerApplication\obj\Release\ServerApplication.pdb
