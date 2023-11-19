@@ -13,98 +13,300 @@ using System.Data;
 
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-[System.ServiceModel.ServiceContractAttribute(ConfigurationName="IService1")]
+[System.ServiceModel.ServiceContractAttribute(ConfigurationName="IService1", CallbackContract=typeof(IService1Callback))]
 public interface IService1
 {
     
-    // CODEGEN: Parameter 'GetDataResult' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/Register")]
     [System.ServiceModel.XmlSerializerFormatAttribute()]
-    GetDataResponse GetData(GetDataRequest request);
+    void Register();
     
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
-    System.Threading.Tasks.Task<GetDataResponse> GetDataAsync(GetDataRequest request);
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/Register")]
+    System.Threading.Tasks.Task RegisterAsync();
     
-    // CODEGEN: Parameter 'GetDataUsingDataContractResult' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IService1/GetDataUsingDataContractResponse")]
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/CreateDatabase")]
     [System.ServiceModel.XmlSerializerFormatAttribute()]
-    GetDataUsingDataContractResponse GetDataUsingDataContract(GetDataUsingDataContractRequest request);
+    void CreateDatabase();
     
-    [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IService1/GetDataUsingDataContractResponse")]
-    System.Threading.Tasks.Task<GetDataUsingDataContractResponse> GetDataUsingDataContractAsync(GetDataUsingDataContractRequest request);
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/CreateDatabase")]
+    System.Threading.Tasks.Task CreateDatabaseAsync();
+    
+    // CODEGEN: Parameter 'name' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/CreateTable")]
+    [System.ServiceModel.XmlSerializerFormatAttribute()]
+    void CreateTable(CreateTable request);
+    
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/CreateTable")]
+    System.Threading.Tasks.Task CreateTableAsync(CreateTable request);
+    
+    // CODEGEN: Parameter 'name' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/DeleteTable")]
+    [System.ServiceModel.XmlSerializerFormatAttribute()]
+    void DeleteTable(DeleteTable request);
+    
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/DeleteTable")]
+    System.Threading.Tasks.Task DeleteTableAsync(DeleteTable request);
+    
+    // CODEGEN: Parameter 'name' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/AddColumn")]
+    [System.ServiceModel.XmlSerializerFormatAttribute()]
+    void AddColumn(AddColumn request);
+    
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/AddColumn")]
+    System.Threading.Tasks.Task AddColumnAsync(AddColumn request);
+    
+    // CODEGEN: Parameter 'name' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/DeleteColumn")]
+    [System.ServiceModel.XmlSerializerFormatAttribute()]
+    void DeleteColumn(DeleteColumn request);
+    
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/DeleteColumn")]
+    System.Threading.Tasks.Task DeleteColumnAsync(DeleteColumn request);
+    
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/DeleteDuplicateRows")]
+    [System.ServiceModel.XmlSerializerFormatAttribute()]
+    void DeleteDuplicateRows(int tableIndex);
+    
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/DeleteDuplicateRows")]
+    System.Threading.Tasks.Task DeleteDuplicateRowsAsync(int tableIndex);
+    
+    // CODEGEN: Parameter 'table' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/UpdateTable")]
+    [System.ServiceModel.XmlSerializerFormatAttribute()]
+    void UpdateTable(UpdateTable request);
+    
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/UpdateTable")]
+    System.Threading.Tasks.Task UpdateTableAsync(UpdateTable request);
+    
+    // CODEGEN: Parameter 'db' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlArrayAttribute'.
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/UpdateDatabase")]
+    [System.ServiceModel.XmlSerializerFormatAttribute()]
+    void UpdateDatabase(UpdateDatabase request);
+    
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/UpdateDatabase")]
+    System.Threading.Tasks.Task UpdateDatabaseAsync(UpdateDatabase request);
 }
 
-[System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-[System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-[System.ServiceModel.MessageContractAttribute(WrapperName="GetData", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
-public partial class GetDataRequest
+public interface IService1Callback
 {
     
-    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
-    public int value;
-    
-    public GetDataRequest()
-    {
-    }
-    
-    public GetDataRequest(int value)
-    {
-        this.value = value;
-    }
+    // CODEGEN: Parameter 'database' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlArrayAttribute'.
+    [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/OnDatabaseUpdated")]
+    [System.ServiceModel.XmlSerializerFormatAttribute()]
+    void OnDatabaseUpdated(OnDatabaseUpdated request);
 }
 
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
 [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-[System.ServiceModel.MessageContractAttribute(WrapperName="GetDataResponse", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
-public partial class GetDataResponse
+[System.ServiceModel.MessageContractAttribute(WrapperName="CreateTable", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+public partial class CreateTable
 {
     
     [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
     [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string GetDataResult;
+    public string name;
     
-    public GetDataResponse()
+    public CreateTable()
     {
     }
     
-    public GetDataResponse(string GetDataResult)
+    public CreateTable(string name)
     {
-        this.GetDataResult = GetDataResult;
-    }
-}
-
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-[System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-[System.ServiceModel.MessageContractAttribute(WrapperName="GetDataUsingDataContract", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
-public partial class GetDataUsingDataContractRequest
-{
-    
-    public GetDataUsingDataContractRequest()
-    {
+        this.name = name;
     }
 }
 
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
 [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-[System.ServiceModel.MessageContractAttribute(WrapperName="GetDataUsingDataContractResponse", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
-public partial class GetDataUsingDataContractResponse
+[System.ServiceModel.MessageContractAttribute(WrapperName="DeleteTable", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+public partial class DeleteTable
 {
     
     [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
     [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public System.Data.DataTable GetDataUsingDataContractResult;
+    public string name;
     
-    public GetDataUsingDataContractResponse()
+    public DeleteTable()
     {
     }
     
-    public GetDataUsingDataContractResponse(System.Data.DataTable GetDataUsingDataContractResult)
+    public DeleteTable(string name)
     {
-        this.GetDataUsingDataContractResult = GetDataUsingDataContractResult;
+        this.name = name;
+    }
+}
+
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+[System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+[System.ServiceModel.MessageContractAttribute(WrapperName="AddColumn", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+public partial class AddColumn
+{
+    
+    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
+    public int tableIndex;
+    
+    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+    public string name;
+    
+    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=2)]
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+    public string colType;
+    
+    public AddColumn()
+    {
+    }
+    
+    public AddColumn(int tableIndex, string name, string colType)
+    {
+        this.tableIndex = tableIndex;
+        this.name = name;
+        this.colType = colType;
+    }
+}
+
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+[System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+[System.ServiceModel.MessageContractAttribute(WrapperName="DeleteColumn", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+public partial class DeleteColumn
+{
+    
+    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
+    public int tableIndex;
+    
+    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+    public string name;
+    
+    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=2)]
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+    public string colType;
+    
+    public DeleteColumn()
+    {
+    }
+    
+    public DeleteColumn(int tableIndex, string name, string colType)
+    {
+        this.tableIndex = tableIndex;
+        this.name = name;
+        this.colType = colType;
+    }
+}
+
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+[System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+[System.ServiceModel.MessageContractAttribute(WrapperName="UpdateTable", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+public partial class UpdateTable
+{
+    
+    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
+    public int tableIndex;
+    
+    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+    public System.Data.DataTable table;
+    
+    public UpdateTable()
+    {
+    }
+    
+    public UpdateTable(int tableIndex, System.Data.DataTable table)
+    {
+        this.tableIndex = tableIndex;
+        this.table = table;
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("svcutil", "4.8.3928.0")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.datacontract.org/2004/07/WcfServiceLibrary")]
+public partial class TabItem
+{
+    
+    private System.Data.DataTable contentField;
+    
+    private string headerField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=0)]
+    public System.Data.DataTable Content
+    {
+        get
+        {
+            return this.contentField;
+        }
+        set
+        {
+            this.contentField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=1)]
+    public string Header
+    {
+        get
+        {
+            return this.headerField;
+        }
+        set
+        {
+            this.headerField = value;
+        }
+    }
+}
+
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+[System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+[System.ServiceModel.MessageContractAttribute(WrapperName="UpdateDatabase", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+public partial class UpdateDatabase
+{
+    
+    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
+    [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
+    [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://schemas.datacontract.org/2004/07/WcfServiceLibrary")]
+    public TabItem[] db;
+    
+    public UpdateDatabase()
+    {
+    }
+    
+    public UpdateDatabase(TabItem[] db)
+    {
+        this.db = db;
+    }
+}
+
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+[System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+[System.ServiceModel.MessageContractAttribute(WrapperName="OnDatabaseUpdated", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
+public partial class OnDatabaseUpdated
+{
+    
+    [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
+    [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
+    [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://schemas.datacontract.org/2004/07/WcfServiceLibrary")]
+    public TabItem[] database;
+    
+    public OnDatabaseUpdated()
+    {
+    }
+    
+    public OnDatabaseUpdated(TabItem[] database)
+    {
+        this.database = database;
     }
 }
 
@@ -115,82 +317,227 @@ public interface IService1Channel : IService1, System.ServiceModel.IClientChanne
 
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-public partial class Service1Client : System.ServiceModel.ClientBase<IService1>, IService1
+public partial class Service1Client : System.ServiceModel.DuplexClientBase<IService1>, IService1
 {
     
-    public Service1Client()
+    public Service1Client(System.ServiceModel.InstanceContext callbackInstance) : 
+            base(callbackInstance)
     {
     }
     
-    public Service1Client(string endpointConfigurationName) : 
-            base(endpointConfigurationName)
+    public Service1Client(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+            base(callbackInstance, endpointConfigurationName)
     {
     }
     
-    public Service1Client(string endpointConfigurationName, string remoteAddress) : 
-            base(endpointConfigurationName, remoteAddress)
+    public Service1Client(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+            base(callbackInstance, endpointConfigurationName, remoteAddress)
     {
     }
     
-    public Service1Client(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-            base(endpointConfigurationName, remoteAddress)
+    public Service1Client(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+            base(callbackInstance, endpointConfigurationName, remoteAddress)
     {
     }
     
-    public Service1Client(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-            base(binding, remoteAddress)
+    public Service1Client(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+            base(callbackInstance, binding, remoteAddress)
     {
     }
     
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    GetDataResponse IService1.GetData(GetDataRequest request)
+    public void Register()
     {
-        return base.Channel.GetData(request);
+        base.Channel.Register();
     }
     
-    public string GetData(int value)
+    public System.Threading.Tasks.Task RegisterAsync()
     {
-        GetDataRequest inValue = new GetDataRequest();
-        inValue.value = value;
-        GetDataResponse retVal = ((IService1)(this)).GetData(inValue);
-        return retVal.GetDataResult;
+        return base.Channel.RegisterAsync();
     }
     
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    System.Threading.Tasks.Task<GetDataResponse> IService1.GetDataAsync(GetDataRequest request)
+    public void CreateDatabase()
     {
-        return base.Channel.GetDataAsync(request);
+        base.Channel.CreateDatabase();
     }
     
-    public System.Threading.Tasks.Task<GetDataResponse> GetDataAsync(int value)
+    public System.Threading.Tasks.Task CreateDatabaseAsync()
     {
-        GetDataRequest inValue = new GetDataRequest();
-        inValue.value = value;
-        return ((IService1)(this)).GetDataAsync(inValue);
+        return base.Channel.CreateDatabaseAsync();
     }
     
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    GetDataUsingDataContractResponse IService1.GetDataUsingDataContract(GetDataUsingDataContractRequest request)
+    void IService1.CreateTable(CreateTable request)
     {
-        return base.Channel.GetDataUsingDataContract(request);
+        base.Channel.CreateTable(request);
     }
     
-    public System.Data.DataTable GetDataUsingDataContract()
+    public void CreateTable(string name)
     {
-        GetDataUsingDataContractRequest inValue = new GetDataUsingDataContractRequest();
-        GetDataUsingDataContractResponse retVal = ((IService1)(this)).GetDataUsingDataContract(inValue);
-        return retVal.GetDataUsingDataContractResult;
+        CreateTable inValue = new CreateTable();
+        inValue.name = name;
+        ((IService1)(this)).CreateTable(inValue);
     }
     
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    System.Threading.Tasks.Task<GetDataUsingDataContractResponse> IService1.GetDataUsingDataContractAsync(GetDataUsingDataContractRequest request)
+    System.Threading.Tasks.Task IService1.CreateTableAsync(CreateTable request)
     {
-        return base.Channel.GetDataUsingDataContractAsync(request);
+        return base.Channel.CreateTableAsync(request);
     }
     
-    public System.Threading.Tasks.Task<GetDataUsingDataContractResponse> GetDataUsingDataContractAsync()
+    public System.Threading.Tasks.Task CreateTableAsync(string name)
     {
-        GetDataUsingDataContractRequest inValue = new GetDataUsingDataContractRequest();
-        return ((IService1)(this)).GetDataUsingDataContractAsync(inValue);
+        CreateTable inValue = new CreateTable();
+        inValue.name = name;
+        return ((IService1)(this)).CreateTableAsync(inValue);
+    }
+    
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    void IService1.DeleteTable(DeleteTable request)
+    {
+        base.Channel.DeleteTable(request);
+    }
+    
+    public void DeleteTable(string name)
+    {
+        DeleteTable inValue = new DeleteTable();
+        inValue.name = name;
+        ((IService1)(this)).DeleteTable(inValue);
+    }
+    
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    System.Threading.Tasks.Task IService1.DeleteTableAsync(DeleteTable request)
+    {
+        return base.Channel.DeleteTableAsync(request);
+    }
+    
+    public System.Threading.Tasks.Task DeleteTableAsync(string name)
+    {
+        DeleteTable inValue = new DeleteTable();
+        inValue.name = name;
+        return ((IService1)(this)).DeleteTableAsync(inValue);
+    }
+    
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    void IService1.AddColumn(AddColumn request)
+    {
+        base.Channel.AddColumn(request);
+    }
+    
+    public void AddColumn(int tableIndex, string name, string colType)
+    {
+        AddColumn inValue = new AddColumn();
+        inValue.tableIndex = tableIndex;
+        inValue.name = name;
+        inValue.colType = colType;
+        ((IService1)(this)).AddColumn(inValue);
+    }
+    
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    System.Threading.Tasks.Task IService1.AddColumnAsync(AddColumn request)
+    {
+        return base.Channel.AddColumnAsync(request);
+    }
+    
+    public System.Threading.Tasks.Task AddColumnAsync(int tableIndex, string name, string colType)
+    {
+        AddColumn inValue = new AddColumn();
+        inValue.tableIndex = tableIndex;
+        inValue.name = name;
+        inValue.colType = colType;
+        return ((IService1)(this)).AddColumnAsync(inValue);
+    }
+    
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    void IService1.DeleteColumn(DeleteColumn request)
+    {
+        base.Channel.DeleteColumn(request);
+    }
+    
+    public void DeleteColumn(int tableIndex, string name, string colType)
+    {
+        DeleteColumn inValue = new DeleteColumn();
+        inValue.tableIndex = tableIndex;
+        inValue.name = name;
+        inValue.colType = colType;
+        ((IService1)(this)).DeleteColumn(inValue);
+    }
+    
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    System.Threading.Tasks.Task IService1.DeleteColumnAsync(DeleteColumn request)
+    {
+        return base.Channel.DeleteColumnAsync(request);
+    }
+    
+    public System.Threading.Tasks.Task DeleteColumnAsync(int tableIndex, string name, string colType)
+    {
+        DeleteColumn inValue = new DeleteColumn();
+        inValue.tableIndex = tableIndex;
+        inValue.name = name;
+        inValue.colType = colType;
+        return ((IService1)(this)).DeleteColumnAsync(inValue);
+    }
+    
+    public void DeleteDuplicateRows(int tableIndex)
+    {
+        base.Channel.DeleteDuplicateRows(tableIndex);
+    }
+    
+    public System.Threading.Tasks.Task DeleteDuplicateRowsAsync(int tableIndex)
+    {
+        return base.Channel.DeleteDuplicateRowsAsync(tableIndex);
+    }
+    
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    void IService1.UpdateTable(UpdateTable request)
+    {
+        base.Channel.UpdateTable(request);
+    }
+    
+    public void UpdateTable(int tableIndex, System.Data.DataTable table)
+    {
+        UpdateTable inValue = new UpdateTable();
+        inValue.tableIndex = tableIndex;
+        inValue.table = table;
+        ((IService1)(this)).UpdateTable(inValue);
+    }
+    
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    System.Threading.Tasks.Task IService1.UpdateTableAsync(UpdateTable request)
+    {
+        return base.Channel.UpdateTableAsync(request);
+    }
+    
+    public System.Threading.Tasks.Task UpdateTableAsync(int tableIndex, System.Data.DataTable table)
+    {
+        UpdateTable inValue = new UpdateTable();
+        inValue.tableIndex = tableIndex;
+        inValue.table = table;
+        return ((IService1)(this)).UpdateTableAsync(inValue);
+    }
+    
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    void IService1.UpdateDatabase(UpdateDatabase request)
+    {
+        base.Channel.UpdateDatabase(request);
+    }
+    
+    public void UpdateDatabase(TabItem[] db)
+    {
+        UpdateDatabase inValue = new UpdateDatabase();
+        inValue.db = db;
+        ((IService1)(this)).UpdateDatabase(inValue);
+    }
+    
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    System.Threading.Tasks.Task IService1.UpdateDatabaseAsync(UpdateDatabase request)
+    {
+        return base.Channel.UpdateDatabaseAsync(request);
+    }
+    
+    public System.Threading.Tasks.Task UpdateDatabaseAsync(TabItem[] db)
+    {
+        UpdateDatabase inValue = new UpdateDatabase();
+        inValue.db = db;
+        return ((IService1)(this)).UpdateDatabaseAsync(inValue);
     }
 }

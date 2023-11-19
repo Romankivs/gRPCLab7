@@ -5,7 +5,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using WpfApp2;
 
 namespace ClientApplication
 {
@@ -18,8 +17,8 @@ namespace ClientApplication
         {
             Type[] extraAllowedTypes = new Type[]
             {
-                typeof(ComplexInteger),
-                typeof(ComplexReal)
+                typeof(WcfServiceLibrary.ComplexInteger),
+                typeof(WcfServiceLibrary.ComplexReal)
             };
             AppDomain.CurrentDomain.SetData("System.Data.DataSetDefaultAllowedTypes", extraAllowedTypes);
         }

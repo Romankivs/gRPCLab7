@@ -79,8 +79,6 @@
     <Compile Include="AddTableDialog.xaml.cs">
       <DependentUpon>AddTableDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ColumnTypes.cs" />
-    <Compile Include="ComplexNums.cs" />
     <Compile Include="RemoveColumnDialog.xaml.cs">
       <DependentUpon>RemoveColumnDialog.xaml</DependentUpon>
     </Compile>
@@ -157,6 +155,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WcfServiceLibrary\WcfServiceLibrary.csproj">
+      <Project>{c59b3f40-0bae-45d8-8b67-7d9236442d6a}</Project>
+      <Name>WcfServiceLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

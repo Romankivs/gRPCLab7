@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\forus\source\repos\ClientApplication\obj\Debug\
+C:\Users\forus\source\repos\ClientServerLab\ClientApplication\obj\Debug\
 ClientApplication
 none
 false
 DEBUG;TRACE
-C:\Users\forus\source\repos\ClientApplication\App.xaml
+C:\Users\forus\source\repos\ClientServerLab\ClientApplication\App.xaml
 5961278337
 
-12-2093648233
-15-472223226
+101987633877
+16-1716453309
 AddColumnDialog.xaml;AddTableDialog.xaml;MainWindow.xaml;RemoveColumnDialog.xaml;RemoveTableDialog.xaml;
 
 False

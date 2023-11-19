@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,82 +18,54 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
-using WpfApp2;
+using WcfServiceLibrary;
 
 namespace ClientApplication
 {
-    public sealed class TabItem
-    {
-        public TabItem(string header, DataTable content)
-        {
-            Header = header;
-            Content = content;
-        }
-
-        public string Header { get; set; }
-        public DataTable Content { get; set; }
-    }
-
-    class Serializer
-    {
-        public static IList<TabItem>? Deserialize(string a_fileName)
-        {
-            XmlSerializer deserializer = new XmlSerializer(typeof(List<TabItem>));
-
-            TextReader reader = new StreamReader(a_fileName);
-
-            object? obj = deserializer.Deserialize(reader);
-
-            reader.Close();
-
-            return obj as List<TabItem>;
-        }
-
-        public static void Serialization(IList<TabItem> a_stations, string a_fileName)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(List<TabItem>));
-
-            using (var stream = File.OpenWrite(a_fileName))
-            {
-                serializer.Serialize(stream, a_stations);
-            }
-        }
-    }
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IService1Callback
     {
         ObservableCollection<TabItem> database = new ObservableCollection<TabItem>();
+
+        Service1Client client;
+
+        public void OnDatabaseUpdated(OnDatabaseUpdated request)
+        {
+            var index = tabTables.SelectedIndex;
+
+            database = new ObservableCollection<TabItem>(request.database);
+
+            foreach(var table in database)
+            {
+                table.Content.RowChanged += RowChanged;
+            }
+
+            tabTables.ItemsSource = database;
+
+            if (index > -1)
+            {
+                tabTables.SelectedIndex = index;
+            }
+        }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            //Step 1: Create an instance of the WCF proxy.
-            Service1Client client = new Service1Client();
+            var callback = this;
+            var instanceContext = new InstanceContext(callback);
+            client = new Service1Client(instanceContext);
 
-            DataTable table = client.GetDataUsingDataContract();
-
-            table.Columns.Add("ID", typeof(string));
-            table.Columns.Add("Name", typeof(string));
-
-            table.NewRow();
-
-            var test = client.GetData(3);
-            test += 1;
+            client.Register();
 
             tabTables.ItemsSource = database;
-
-            Console.WriteLine("\nPress <Enter> to terminate the client.");
-            Console.ReadLine();
-            client.Close();
         }
 
         private void CreateDB(object sender, RoutedEventArgs e)
         {
-            database.Clear();
+            client.CreateDatabase();
         }
 
         private void SaveDB(object sender, RoutedEventArgs e)
@@ -106,7 +80,11 @@ namespace ClientApplication
             if (result == true)
             {
                 string filename = dialog.FileName;
-                Serializer.Serialization(database.ToList(), filename);
+                DataContractSerializer serial = new DataContractSerializer(typeof(List<TabItem>));
+
+                FileStream writer = new FileStream(filename, FileMode.Create);
+
+                serial.WriteObject(writer, database);
             }
         }
 
@@ -120,13 +98,13 @@ namespace ClientApplication
             if (result == true)
             {
                 string filename = dialog.FileName;
-                database.Clear();
-                var tablesList = Serializer.Deserialize(filename);
-                if (tablesList is List<TabItem> tablesL)
-                {
-                    foreach (var table in tablesL)
-                        database.Add(table);
-                }
+                DataContractSerializer serial = new DataContractSerializer(typeof(List<TabItem>));
+
+                FileStream reader = new FileStream(filename, FileMode.Open);
+
+                var db = serial.ReadObject(reader) as List<TabItem>;
+
+                client.UpdateDatabase(db.ToArray());
             }
         }
 
@@ -137,15 +115,19 @@ namespace ClientApplication
 
             if (result == true)
             {
-                var tabItem = new TabItem(addDialog.TabName, new DataTable(addDialog.TabName));
-                tabItem.Content.ColumnChanged += new DataColumnChangeEventHandler(ColumnChanged);
-                database.Add(tabItem);
+                client.CreateTable(addDialog.TabName);
             }
         }
 
-        private void ColumnChanged(object sender, DataColumnChangeEventArgs e)
+        private void RowChanged(object sender, DataRowChangeEventArgs e)
         {
-            Console.WriteLine("Wow");
+            var index = tabTables.SelectedIndex;
+            if (index < 0)
+            {
+                return;
+            }
+
+            client.UpdateTable(index, database[index].Content);
         }
 
         private void DeleteTable(object sender, RoutedEventArgs e)
@@ -153,28 +135,9 @@ namespace ClientApplication
             RemoveTableDialog removeDialog = new RemoveTableDialog();
             var result = removeDialog.ShowDialog();
 
-            try
+            if (result == true)
             {
-                if (result == true)
-                {
-                    bool found = false;
-                    for (int i = 0; i < database.Count; i++)
-                    {
-                        if (database[i].Header == removeDialog.TabName)
-                        {
-                            database.RemoveAt(i);
-                            found = true;
-                        }
-                    }
-                    if (!found)
-                    {
-                        throw new KeyNotFoundException();
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Couldn't find such table");
+                client.DeleteTable(removeDialog.TabName);
             }
         }
 
@@ -190,20 +153,7 @@ namespace ClientApplication
                 {
                     return;
                 }
-                DataTable selectedTable = database[index].Content;
-
-                try
-                {
-                    Type colType = ColTypes.ColStringToType(addDialog.ColType);
-                    DataColumn newCol = new DataColumn(addDialog.ColName + " (" + addDialog.ColType + ")", colType);
-                    selectedTable.Columns.Add(newCol);
-
-                    tabTables.Items.Refresh();
-                }
-                catch
-                {
-                    MessageBox.Show("Couldn't add column");
-                }
+                client.AddColumn(index, addDialog.ColName, addDialog.ColType);
             }
         }
 
@@ -219,31 +169,7 @@ namespace ClientApplication
                 {
                     return;
                 }
-                DataTable selectedTable = database[index].Content;
-
-                try
-                {
-                    Type colType = ColTypes.ColStringToType(removeDialog.ColType);
-                    bool found = false;
-                    for (int i = 0; i < selectedTable.Columns.Count; i++)
-                    {
-                        if (selectedTable.Columns[i].ColumnName == removeDialog.ColName + " (" + removeDialog.ColType + ")")
-                        {
-                            selectedTable.Columns.RemoveAt(i);
-                            found = true;
-                        }
-                    }
-                    if (!found)
-                    {
-                        throw new KeyNotFoundException();
-                    }
-
-                    tabTables.Items.Refresh();
-                }
-                catch
-                {
-                    MessageBox.Show("Couldn't find such column");
-                }
+                client.DeleteColumn(index, removeDialog.ColName, removeDialog.ColType);
             }
         }
 
@@ -254,37 +180,7 @@ namespace ClientApplication
             {
                 return;
             }
-            var table = database[index].Content;
-
-            List<string> uniqueRowHashes = new List<string>();
-            List<DataRow> rowsToRemove = new List<DataRow>();
-            StringBuilder rowHashBuilder = new StringBuilder();
-
-            foreach (DataRow row in table.Rows)
-            {
-                rowHashBuilder.Clear();
-                foreach (DataColumn column in table.Columns)
-                {
-                    rowHashBuilder.Append(row[column.ColumnName].ToString());
-                }
-
-                string rowHash = rowHashBuilder.ToString();
-                if (uniqueRowHashes.Contains(rowHash))
-                {
-                    rowsToRemove.Add(row);
-                }
-                else
-                {
-                    uniqueRowHashes.Add(rowHash);
-                }
-            }
-
-            foreach (DataRow row in rowsToRemove)
-            {
-                table.Rows.Remove(row);
-            }
-
-            tabTables.Items.Refresh();
+            client.DeleteDuplicateRows(index);
         }
     }
 }
