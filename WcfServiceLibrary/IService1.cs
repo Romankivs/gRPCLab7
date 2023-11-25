@@ -8,68 +8,67 @@ using System.Text;
 
 namespace WcfServiceLibrary
 {
-    public interface IService1Callback
+    [DataContract]
+    public class TableInfo
     {
-        [OperationContract(IsOneWay = true)]
-        void OnDatabaseUpdated(List<TabItem> database);
+        string name = "";
+        string type = "";
+
+        [DataMember]
+        public string ColumnName
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        [DataMember]
+        public string ColumnType
+        {
+            get { return type; }
+            set { type = value; }
+        }
     }
 
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
-    [ServiceKnownType(typeof(ComplexInteger))]
-    [ServiceKnownType(typeof(ComplexReal))]
-    [ServiceContract(CallbackContract = typeof(IService1Callback))]
+    [ServiceContract]
     public interface IService1
     {
-        [OperationContract(IsOneWay = true)]
-        void Register();
-
-        [OperationContract(IsOneWay = true)]
+        [OperationContract]
         void CreateDatabase();
 
-        [OperationContract(IsOneWay = true)]
-        void CreateTable(string name);
+        [OperationContract]
+        void AddTable(string tableName, TableInfo[] columnInfo);
 
-        [OperationContract(IsOneWay = true)]
-        void DeleteTable(string name);
+        [OperationContract]
+        void RemoveTable(string tableName);
 
-        [OperationContract(IsOneWay = true)]
-        void AddColumn(int tableIndex, string name, string colType);
+        [OperationContract]
+        void AddNewRow(string tableName);
 
-        [OperationContract(IsOneWay = true)]
-        void DeleteColumn(int tableIndex, string name, string colType);
+        [OperationContract]
+        void AddRow(string tableName, object[] values);
 
-        [OperationContract(IsOneWay = true)]
-        void DeleteDuplicateRows(int tableIndex);
+        [OperationContract]
+        void DeleteRow(string tableName, int rowIndex);
 
-        [OperationContract(IsOneWay = true)]
-        void UpdateTable(int tableIndex, DataTable table);
+        [OperationContract]
+        void AddColumn(string tableName, TableInfo columnInfo);
 
-        [OperationContract(IsOneWay = true)]
-        void UpdateDatabase(List<TabItem> db);
-    }
+        [OperationContract]
+        void DeleteColumn(string tableName, string columnName);
 
-    // Use a data contract as illustrated in the sample below to add composite types to service operations.
-    // You can add XSD files into the project. After building the project, you can directly use the data types defined there, with the namespace "WcfServiceLibrary.ContractType".
-    [KnownType(typeof(ComplexInteger))]
-    [KnownType(typeof(ComplexReal))]
-    [DataContract]
-    public class TabItem
-    {
-        DataTable boolValue = new DataTable("");
-        string stringValue = "";
+        [OperationContract]
+        void RemoveDuplicates(string tableName);
 
-        [DataMember]
-        public DataTable Content
-        {
-            get { return boolValue; }
-            set { boolValue = value; }
-        }
+        [OperationContract]
+        List<TableInfo> GetColumnsInfo(string tableName);
 
-        [DataMember]
-        public string Header
-        {
-            get { return stringValue; }
-            set { stringValue = value; }
-        }
+        [OperationContract]
+        List<string> GetTables();
+
+        [OperationContract]
+        List<object[]> DisplayTable(string tableName);
+
+        [OperationContract]
+        bool UpdateTableCell(string tableName, int row, string colName, string value);
     }
 }

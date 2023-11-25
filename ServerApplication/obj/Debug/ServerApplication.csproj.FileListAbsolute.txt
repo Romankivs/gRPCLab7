@@ -20,3 +20,14 @@ C:\Users\forus\source\repos\ClientServerLab\ServerApplication\obj\Debug\ServerAp
 C:\Users\forus\source\repos\ClientServerLab\ServerApplication\obj\Debug\ServerApplication.csproj.CopyComplete
 C:\Users\forus\source\repos\ClientServerLab\ServerApplication\obj\Debug\ServerApplication.exe
 C:\Users\forus\source\repos\ClientServerLab\ServerApplication\obj\Debug\ServerApplication.pdb
+C:\Users\forus\source\repos\WebService\ServerApplication\bin\Debug\ServerApplication.exe.config
+C:\Users\forus\source\repos\WebService\ServerApplication\bin\Debug\ServerApplication.exe
+C:\Users\forus\source\repos\WebService\ServerApplication\bin\Debug\ServerApplication.pdb
+C:\Users\forus\source\repos\WebService\ServerApplication\bin\Debug\WcfServiceLibrary.dll
+C:\Users\forus\source\repos\WebService\ServerApplication\bin\Debug\WcfServiceLibrary.pdb
+C:\Users\forus\source\repos\WebService\ServerApplication\bin\Debug\WcfServiceLibrary.dll.config
+C:\Users\forus\source\repos\WebService\ServerApplication\obj\Debug\ServerApplication.csproj.AssemblyReference.cache
+C:\Users\forus\source\repos\WebService\ServerApplication\obj\Debug\ServerApplication.csproj.CoreCompileInputs.cache
+C:\Users\forus\source\repos\WebService\ServerApplication\obj\Debug\ServerApplication.csproj.CopyComplete
+C:\Users\forus\source\repos\WebService\ServerApplication\obj\Debug\ServerApplication.exe
+C:\Users\forus\source\repos\WebService\ServerApplication\obj\Debug\ServerApplication.pdb

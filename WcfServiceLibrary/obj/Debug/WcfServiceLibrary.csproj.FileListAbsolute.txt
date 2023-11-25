@@ -12,3 +12,10 @@ C:\Users\forus\source\repos\ClientServerLab\WcfServiceLibrary\obj\Debug\WcfServi
 C:\Users\forus\source\repos\ClientServerLab\WcfServiceLibrary\obj\Debug\WcfServiceLibrary.csproj.CoreCompileInputs.cache
 C:\Users\forus\source\repos\ClientServerLab\WcfServiceLibrary\obj\Debug\WcfServiceLibrary.dll
 C:\Users\forus\source\repos\ClientServerLab\WcfServiceLibrary\obj\Debug\WcfServiceLibrary.pdb
+C:\Users\forus\source\repos\WebService\WcfServiceLibrary\bin\Debug\WcfServiceLibrary.dll.config
+C:\Users\forus\source\repos\WebService\WcfServiceLibrary\bin\Debug\WcfServiceLibrary.dll
+C:\Users\forus\source\repos\WebService\WcfServiceLibrary\bin\Debug\WcfServiceLibrary.pdb
+C:\Users\forus\source\repos\WebService\WcfServiceLibrary\obj\Debug\WcfServiceLibrary.csproj.AssemblyReference.cache
+C:\Users\forus\source\repos\WebService\WcfServiceLibrary\obj\Debug\WcfServiceLibrary.csproj.CoreCompileInputs.cache
+C:\Users\forus\source\repos\WebService\WcfServiceLibrary\obj\Debug\WcfServiceLibrary.dll
+C:\Users\forus\source\repos\WebService\WcfServiceLibrary\obj\Debug\WcfServiceLibrary.pdb

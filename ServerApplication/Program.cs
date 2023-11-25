@@ -10,20 +10,13 @@ namespace GettingStartedHost
     {
         static void Main(string[] args)
         {
-            Type[] extraAllowedTypes = new Type[]
-{
-                typeof(WcfServiceLibrary.ComplexInteger),
-                typeof(WcfServiceLibrary.ComplexReal)
-};
-            AppDomain.CurrentDomain.SetData("System.Data.DataSetDefaultAllowedTypes", extraAllowedTypes);
-
             Uri baseAddress = new Uri("http://localhost:8000/Database/");
 
             ServiceHost selfHost = new ServiceHost(typeof(Service1), baseAddress);
 
             try
             {
-                selfHost.AddServiceEndpoint(typeof(IService1), new WSDualHttpBinding(), "mex");
+                selfHost.AddServiceEndpoint(typeof(IService1), new BasicHttpBinding(), "");
 
                 ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
                 smb.HttpGetEnabled = true;
