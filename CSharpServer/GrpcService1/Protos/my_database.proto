@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcService1";
+
+package dbservice;
+
+import "google/protobuf/struct.proto";
+
+service MyDatabaseService {
+    rpc CreateDatabase (CreateDatabaseRequest) returns (Empty);
+    rpc AddTable (AddTableRequest) returns (Empty);
+    rpc RemoveTable (RemoveTableRequest) returns (Empty);
+    rpc AddNewRow (AddNewRowRequest) returns (Empty);
+    rpc AddRow (AddRowRequest) returns (Empty);
+    rpc DeleteRow (DeleteRowRequest) returns (Empty);
+    rpc AddColumn (AddColumnRequest) returns (Empty);
+    rpc DeleteColumn (DeleteColumnRequest) returns (Empty);
+    rpc RemoveDuplicates (RemoveDuplicatesRequest) returns (Empty);
+    rpc GetColumnsInfo (GetColumnsInfoRequest) returns (ColumnsInfoResponse);
+    rpc GetTables (Empty) returns (TablesResponse);
+    rpc DisplayTable (DisplayTableRequest) returns (DisplayTableResponse);
+    rpc UpdateTableCell (UpdateTableCellRequest) returns (UpdateTableCellResponse);
+}
+
+message Empty {}
+
+message TableInfo {
+    string ColumnName = 1;
+    string ColumnType = 2;
+}
+
+message DatabaseInfo {
+    map<string, DynamicTable> tables = 1;
+}
+
+message DynamicTable {
+    repeated ColumnInfo columnInfo = 1;
+    repeated Row rows = 2;
+}
+
+message ColumnInfo {
+    string name = 1;
+    string type = 2;
+}
+
+message Row {
+    map<string, google.protobuf.Value> values = 1;
+}
+
+message CreateDatabaseRequest {}
+
+message AddTableRequest {
+    string tableName = 1;
+    repeated TableInfo columnInfo = 2;
+}
+
+message RemoveTableRequest {
+    string tableName = 1;
+}
+
+message AddNewRowRequest {
+    string tableName = 1;
+}
+
+message AddRowRequest {
+    string tableName = 1;
+    repeated google.protobuf.Value values = 2;
+}
+
+message DeleteRowRequest {
+    string tableName = 1;
+    int32 rowIndex = 2;
+}
+
+message AddColumnRequest {
+    string tableName = 1;
+    TableInfo columnInfo = 2;
+}
+
+message DeleteColumnRequest {
+    string tableName = 1;
+    string columnName = 2;
+}
+
+message RemoveDuplicatesRequest {
+    string tableName = 1;
+}
+
+message GetColumnsInfoRequest {
+    string tableName = 1;
+}
+
+message ColumnsInfoResponse {
+    repeated TableInfo columnsInfo = 1;
+}
+
+message TablesResponse {
+    repeated string tables = 1;
+}
+
+message DisplayTableRequest {
+    string tableName = 1;
+}
+
+message DisplayTableResponse {
+    repeated google.protobuf.Struct rows = 1;
+}
+
+message UpdateTableCellRequest {
+    string tableName = 1;
+    int32 row = 2;
+    string colName = 3;
+    string value = 4;
+}
+
+message UpdateTableCellResponse {
+    bool success = 1;
+}

@@ -1,0 +1,3 @@
+obj\Debug\net7.0\Protos/MyDatabase.cs \
+obj\Debug\net7.0\Protos/MyDatabaseGrpc.cs: C:/Users/forus/.nuget/packages/grpc.tools/2.49.0/build/native/include/google/protobuf/struct.proto\
+ Protos/my_database.proto

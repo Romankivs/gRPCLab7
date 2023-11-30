@@ -1,42 +1,18 @@
 import tkinter as tk
-from tkinter import messagebox
-from tkinter import simpledialog
+from tkinter import messagebox, simpledialog
 from tksheet import Sheet
-from zeep import Client
-from zeep import xsd
-
-wsdl = 'http://localhost:8000/Database/?wsdl'
-client = Client(wsdl=wsdl)
-
-# Add a table to the database
-table_info = [
-    {"ColumnName": "Name", "ColumnType": "System.String"},
-    {"ColumnName": "Age", "ColumnType": "System.Int32"},
-    {"ColumnName": "Grade", "ColumnType": "System.Double"}
-]
-
-client.service.AddTable("Students", {"TableInfo": table_info})
-
-value = xsd.AnyObject(xsd.String(), 'Alice')
-intValue = xsd.AnyObject(xsd.Int(), 42)
-floatValue = xsd.AnyObject(xsd.Double(), 90.5)
-
-# Add data to the table
-
-strings = [value, intValue, floatValue]
-
-client.service.AddRow("Students", {"anyType": strings})
-client.service.AddRow("Students", {"anyType": strings})
-client.service.AddRow("Students", {"anyType": strings})
-client.service.AddRow("Students", {"anyType": strings})
+import grpc
+from my_database_pb2 import AddTableRequest, AddColumnRequest, DeleteColumnRequest, AddRowRequest, DeleteRowRequest, AddNewRowRequest, RemoveTableRequest, DisplayTableRequest, RemoveDuplicatesRequest, GetColumnsInfoRequest, UpdateTableCellRequest, TableInfo, Empty
+from my_database_pb2_grpc import MyDatabaseServiceStub
 
 class DatabaseGUI:
     def __init__(self, master):
         self.master = master
         self.master.title("Database GUI")
 
-        wsdl = 'http://localhost:8000/Database/?wsdl'
-        self.client = Client(wsdl=wsdl)
+        grpc_server_address = 'localhost:5031'
+        channel = grpc.insecure_channel(grpc_server_address)
+        self.stub = MyDatabaseServiceStub(channel)
 
         button_frame = tk.Frame(master)
         button_frame.pack()
@@ -70,10 +46,7 @@ class DatabaseGUI:
 
         self.table_frame = tk.Frame(self.table_canvas)
 
-        self.display_tables_button = tk.Button(button_frame, text="Display Tables", command=self.display_tables)
-        self.display_tables_button.pack(side=tk.LEFT, padx=(5, 5), pady=(5, 5))
-
-        self.sheet = Sheet(self.master, data=[] , header=[], width=1000, height=500)
+        self.sheet = Sheet(self.master, data=[], header=[], width=1000, height=500)
         self.sheet.enable_bindings(("single", "edit", "edit_cell"))
         self.sheet.cell_edit_binding(enable=True)
         self.sheet.extra_bindings([("end_edit_cell", self.end_edit_cell)])
@@ -81,13 +54,23 @@ class DatabaseGUI:
 
         self.display_tables()
 
-    def end_edit_cell(self, event = None):
+    def end_edit_cell(self, event=None):
         if event.text is not None:
-            res = self.client.service.UpdateTableCell(self.selected_table, event.row, self.column_names[event.column], event.text)
-            if res:
-                return event.text
-            messagebox.showinfo("Error", "Invalid input", parent=self.master)
-            return None
+            try:
+                res = self.stub.UpdateTableCell(
+                    UpdateTableCellRequest(
+                        tableName=self.selected_table,
+                        row=event.row,
+                        colName=self.column_names[event.column],
+                        value=event.text
+                    )
+                ).success
+                if res:
+                    return event.text
+            except grpc.RpcError as e:
+                print(f"Error: {e}")
+                messagebox.showinfo("Error", "Invalid input", parent=self.master)
+        return None
 
     def convert_to_csharp_type(self, user_type):
         type_mapping = {
@@ -99,90 +82,144 @@ class DatabaseGUI:
         return type_mapping.get(user_type, user_type)
 
     def create_database(self):
-        self.client.service.CreateDatabase()
-        self.display_tables()
-        self.sheet.headers([])
-        self.sheet.set_sheet_data(data=[])
-        messagebox.showinfo("Database Created", "Database has been created.", parent=self.master)
+        try:
+            self.stub.CreateDatabase(Empty())
+            self.display_tables()
+            self.sheet.headers([])
+            self.sheet.set_sheet_data(data=[])
+            messagebox.showinfo("Database Created", "Database has been created.", parent=self.master)
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def add_table(self):
-        table_name = simpledialog.askstring("Input", "Enter table name:", parent=self.master)
-        if table_name:
-            self.client.service.AddTable(table_name, [])
-            self.client.service.AddColumn(table_name, { "ColumnName": "Column1", "ColumnType": self.convert_to_csharp_type("str") })
-            self.client.service.AddNewRow(table_name)
-            self.display_tables()
+        try:
+            table_name = simpledialog.askstring("Input", "Enter table name:", parent=self.master)
+            if table_name:
+                self.stub.AddTable(
+                    AddTableRequest(
+                        tableName=table_name,
+                        columnInfo=[
+                            TableInfo(ColumnName="Column1", ColumnType=self.convert_to_csharp_type("str")),
+                        ]
+                    )
+                )
+                self.stub.AddNewRow(AddRowRequest(tableName=table_name))
+                self.display_tables()
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def delete_table(self):
-        if self.selected_table:
-            self.client.service.RemoveTable(self.selected_table)
-            self.display_tables()
-            if (self.tables):
-                self.display_selected_table_content(self.tables[0])
-            else:
-                self.sheet.headers([])
-                self.sheet.set_sheet_data(data=[])
+        try:
+            if self.selected_table:
+                self.stub.RemoveTable(RemoveTableRequest(tableName=self.selected_table))
+                self.display_tables()
+                if self.tables:
+                    self.display_selected_table_content(self.tables[0])
+                else:
+                    self.sheet.headers([])
+                    self.sheet.set_sheet_data(data=[])
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def add_row(self):
-        if self.selected_table:
-            self.client.service.AddNewRow(self.selected_table)
-            self.refresh_selected_table_content()
+        try:
+            if self.selected_table:
+                self.stub.AddNewRow(
+                    AddNewRowRequest(
+                        tableName=self.selected_table
+                    )
+                )
+                self.refresh_selected_table_content()
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def delete_row(self):
-        row_index = simpledialog.askstring("Input", "Enter row index:", parent=self.master)
-        if self.selected_table and row_index:
-            self.client.service.DeleteRow(self.selected_table, row_index)
-            self.refresh_selected_table_content()
+        try:
+            row_index = simpledialog.askstring("Input", "Enter row index:", parent=self.master)
+            if self.selected_table and row_index:
+                self.stub.DeleteRow(
+                    DeleteRowRequest(
+                        tableName=self.selected_table,
+                        rowIndex=int(row_index),
+                    )
+                )
+                self.refresh_selected_table_content()
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def add_column(self):
-        if self.selected_table:
-            column_name = simpledialog.askstring("Input", "Enter column name:", parent=self.master)
-            column_type = simpledialog.askstring("Input", "Enter column type (e.g., int, char, str, real):", parent=self.master)
-            converted_type = self.convert_to_csharp_type(column_type)
-            if column_name and converted_type:
-                self.client.service.AddColumn(self.selected_table, { "ColumnName": column_name, "ColumnType": converted_type })
-                self.refresh_selected_table_content()
+        try:
+            if self.selected_table:
+                column_name = simpledialog.askstring("Input", "Enter column name:", parent=self.master)
+                column_type = simpledialog.askstring("Input", "Enter column type (e.g., int, char, str, real):", parent=self.master)
+                converted_type = self.convert_to_csharp_type(column_type)
+                if column_name and converted_type:
+                    self.stub.AddColumn(
+                        AddColumnRequest(
+                            tableName=self.selected_table,
+                            columnInfo=TableInfo(ColumnName=column_name, ColumnType=converted_type)
+                        )
+                    )
+                    self.refresh_selected_table_content()
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def delete_column(self):
-        if self.selected_table:
-            column_name = simpledialog.askstring("Input", "Enter column name:", parent=self.master)
-            if column_name:
-                self.client.service.DeleteColumn(self.selected_table, column_name)
-                self.refresh_selected_table_content()
+        try:
+            if self.selected_table:
+                column_name = simpledialog.askstring("Input", "Enter column name:", parent=self.master)
+                if column_name:
+                    self.stub.DeleteColumn(
+                        DeleteColumnRequest(
+                            tableName=self.selected_table,
+                            columnName=column_name
+                        )
+                    )
+                    self.refresh_selected_table_content()
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def get_tables(self):
-        tables = self.client.service.GetTables()
-        self.tables = tables
-        table_content = None
-        if tables:
-            table_content = {table: self.client.service.DisplayTable(table) for table in tables}
-        return tables, table_content
+        try:
+            tables = self.stub.GetTables(Empty()).tables
+            self.tables = tables
+            table_content = None
+            if tables:
+                table_content = {table: self.stub.DisplayTable(DisplayTableRequest(tableName=table)).rows for table in tables}
+            return tables, table_content
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def get_columns_info(self):
-        self.columns_info = self.client.service.GetColumnsInfo(self.selected_table)
-        print(self.columns_info)
- 
-        self.column_names = []
-        for info in self.columns_info:
-            self.column_names.append(info["ColumnName"])
+        try:
+            self.columns_info = self.stub.GetColumnsInfo(GetColumnsInfoRequest(tableName=self.selected_table)).columnsInfo
+            self.column_names = [info.ColumnName for info in self.columns_info]
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def remove_duplicates(self):
-        if self.selected_table:
-            self.client.service.RemoveDuplicates(self.selected_table)
-            self.refresh_selected_table_content()
+        try:
+            if self.selected_table:
+                self.stub.RemoveDuplicates(RemoveDuplicatesRequest(tableName=self.selected_table))
+                self.refresh_selected_table_content()
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def display_tables(self):
-        tables, _ = self.get_tables()
+        try:
+            tables, _ = self.get_tables()
 
-        for widget in self.table_frame.winfo_children():
-            widget.destroy()
+            for widget in self.table_frame.winfo_children():
+                widget.destroy()
 
-        if tables:
-            for table in tables:
-                tk.Button(self.table_frame, text=table, command=lambda t=table: self.display_selected_table_content(t)).pack(side=tk.LEFT, padx=(5, 5), pady=(5, 5))
+            if tables:
+                for table in tables:
+                    tk.Button(self.table_frame, text=table, command=lambda t=table: self.display_selected_table_content(t)).pack(side=tk.LEFT, padx=(5, 5), pady=(5, 5))
 
-            self.table_frame.update_idletasks()
-            self.table_frame_id = self.table_canvas.create_window((0, 0), window=self.table_frame, anchor=tk.NW)
+                self.table_frame.update_idletasks()
+                self.table_frame_id = self.table_canvas.create_window((0, 0), window=self.table_frame, anchor=tk.NW)
+        except grpc.RpcError as e:
+            print(f"Error: {e}")
 
     def display_selected_table_content(self, selected_table):
         self.selected_table = selected_table
@@ -190,18 +227,23 @@ class DatabaseGUI:
 
     def refresh_selected_table_content(self):
         _, table_content = self.get_tables()
-        print(table_content)
 
         if self.selected_table in table_content:
             rows = table_content[self.selected_table]
-            for i in range(len(rows)):
-                rows[i] = rows[i]['anyType']
 
             self.get_columns_info()
 
-            self.sheet.headers(self.column_names)
-            self.sheet.set_sheet_data(rows)
+            print(rows)
 
+            data = []
+            for i in range(len(rows)):
+                data.append([])
+                for column in self.column_names:
+                    data[i].append(rows[i][column])
+            print("data:", data)
+
+            self.sheet.headers(self.column_names)
+            self.sheet.set_sheet_data(data)
 
 
 if __name__ == "__main__":
