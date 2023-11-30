@@ -100,12 +100,12 @@ class DatabaseService(MyDatabaseServiceServicer):
             new_row = {}
             for i, value in enumerate(request.values):
                 column_name, column_type = self.tables[table_name].column_info[i]
-                if column_type == 'System.String':
+                if column_type == 'System.String' or column_type == 'System.Char':
                     new_row[column_name] = value.str_value
                 elif column_type == 'System.Int32':
-                    new_row[column_name] = value.int_value
+                    new_row[column_name] = int(value.str_value)
                 elif column_type == 'System.Double':
-                    new_row[column_name] = value.double_value
+                    new_row[column_name] = float(value.str_value)
             self.tables[table_name].rows.append(new_row)
             return Empty()
         else:
@@ -222,12 +222,17 @@ class DatabaseService(MyDatabaseServiceServicer):
 
             if col_index is not None:
                 try:
+                    print(self.tables[table_name].column_info[col_index][1])
                     if self.tables[table_name].column_info[col_index][1] == 'System.String':
                         self.tables[table_name].rows[row_index][col_name] = value
                     elif self.tables[table_name].column_info[col_index][1] == 'System.Int32':
                         self.tables[table_name].rows[row_index][col_name] = int(value)
                     elif self.tables[table_name].column_info[col_index][1] == 'System.Double':
                         self.tables[table_name].rows[row_index][col_name] = float(value)
+                    elif self.tables[table_name].column_info[col_index][1] == 'System.Char':
+                        if len(value) > 1:
+                            return UpdateTableCellResponse(success=False)
+                        self.tables[table_name].rows[row_index][col_name] = value
                     return UpdateTableCellResponse(success=True)
                 except:
                     return UpdateTableCellResponse(success=False)
